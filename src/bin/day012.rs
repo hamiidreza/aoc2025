@@ -12,29 +12,29 @@ fn main() {
         match dir {
             'L' => {
                 if pos == 0 {
-                pos -= x;
+                    pos -= x;
                     while pos < 0 {
                         pos += 100;
                         ctr += 1;
                     }
-                ctr -= 1;
+                    ctr -= 1;
+                } else {
+                    pos -= x;
+                    while pos < 0 {
+                        pos += 100;
+                        ctr += 1;
+                    }
+                    if pos == 0 {
+                        ctr += 1;
+                    }
+                }
             }
-            else {
-                pos -= x;
-                while pos < 0 {
-                    pos += 100;
-                    ctr += 1;
-                }
-                if pos == 0 {
-                    ctr += 1;
-                }
-            }}
             'R' => {
                 pos += x;
                 while pos >= 100 {
                     pos -= 100;
                     ctr += 1;
-                } 
+                }
             }
             _ => {
                 panic!("Invalid direction: {}", dir);
