@@ -26,10 +26,9 @@ fn main() {
             let (max, new_idx) = max_digit_index(truncated);
             idx = new_idx + idx + 1;
             let exp = 11_u32
-            .checked_sub(i.try_into().unwrap())
-            .expect("i too big");
+                .checked_sub(i.try_into().unwrap())
+                .expect("i too big");
             line_max += 10_u64.pow(exp) * max as u64;
-
         }
         println!("{}", line_max);
         sum += line_max;
