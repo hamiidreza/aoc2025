@@ -28,10 +28,10 @@ fn main() {
         }
 
         let op = problem_cols
-        .iter()
-        .map(|&col| grid[rows - 1][col])
-        .find(|&ch| ch == '+' || ch == '*')
-        .expect("Operator not found");
+            .iter()
+            .map(|&col| grid[rows - 1][col])
+            .find(|&ch| ch == '+' || ch == '*')
+            .expect("Operator not found");
 
         let mut numbers = Vec::new();
 
