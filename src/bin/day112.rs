@@ -1,27 +1,37 @@
 use std::collections::HashMap;
 use std::fs;
 
-fn count_paths_with_dac_fft(
+fn count_paths(
     map: &HashMap<String, Vec<String>>,
     node: &str,
     visited_dac: bool,
     visited_fft: bool,
+    memo: &mut HashMap<(String, bool, bool), usize>,
 ) -> usize {
+    let state = (node.to_string(), visited_dac, visited_fft);
+    if let Some(&cached) = memo.get(&state) {
+        return cached;
+    }
+
     let visited_dac = visited_dac || node == "dac";
     let visited_fft = visited_fft || node == "fft";
 
-    if node == "out" {
-        return if visited_dac && visited_fft { 1 } else { 0 };
-    }
-
-    let mut total = 0;
-    if let Some(children) = map.get(node) {
-        for child in children {
-            total += count_paths_with_dac_fft(map, child, visited_dac, visited_fft);
+    let result = if node == "out" {
+        if visited_dac && visited_fft { 1 } else { 0 }
+    } else {
+        let mut total = 0;
+        if let Some(children) = map.get(node) {
+            for child in children {
+                total += count_paths(map, child, visited_dac, visited_fft, memo);
+            }
         }
-    }
-    total
+        total
+    };
+
+    memo.insert(state, result);
+    result
 }
+
 fn main() {
     let input = fs::read_to_string("inputs/day11.txt").expect("Failed to read input file");
     let mut map: HashMap<String, Vec<String>> = HashMap::new();
@@ -32,6 +42,8 @@ fn main() {
             right.trim().split_whitespace().map(String::from).collect(),
         );
     }
-    let total_paths = count_paths_with_dac_fft(&map, "svr", false, false);
+
+    let mut memo = HashMap::new();
+    let total_paths = count_paths(&map, "svr", false, false, &mut memo);
     println!("{}", total_paths);
 }
